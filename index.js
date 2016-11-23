@@ -1,7 +1,8 @@
 'use strict';
 
+require('es6-promise').polyfill();
 require('isomorphic-fetch');
-require('babel-polyfill');
+global.Symbol = require('core-js/es6/symbol');
 
 var Buffer = require('buffer').Buffer;
 
