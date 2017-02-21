@@ -54,6 +54,7 @@ Contact.prototype.PR = function (intendedAmount, id, role, address, note, lastUp
   if (existingTx) {
     existingTx.address = address;
     existingTx.state = FacilitatedTx.WAITING_PAYMENT;
+    existingTx.lastUpdated = lastUpdated;
     return existingTx;
   } else {
     const pr = FacilitatedTx.PR(intendedAmount, id, role, address, note, lastUpdated);

@@ -203,7 +203,7 @@ Contacts.prototype.sendPR = function (userId, intendedAmount, id = uuid(), note,
     const label = 'payment request to ' + contact.name;
     return account.setLabelForReceivingAddress(account.receiveIndex, label);
   };
-  const message = paymentRequest(id, intendedAmount, address);
+  const message = paymentRequest(id, intendedAmount, address, lastUpdated);
   return reserveAddress()
     .then(this.sendMessage.bind(this, userId, PAYMENT_REQUEST_TYPE, message))
     .then(contact.PR.bind(contact, intendedAmount, id, FacilitatedTx.PR_INITIATOR, address, note, lastUpdated))
@@ -212,10 +212,10 @@ Contacts.prototype.sendPR = function (userId, intendedAmount, id = uuid(), note,
 
 // request payment request (step-1)
 Contacts.prototype.sendRPR = function (userId, intendedAmount, id = uuid(), note, lastUpdated) {
-  const message = requestPaymentRequest(intendedAmount, id);
+  const message = requestPaymentRequest(intendedAmount, id, lastUpdated);
   const contact = this.get(userId);
   return this.sendMessage(userId, REQUEST_PAYMENT_REQUEST_TYPE, message)
-    .then(contact.RPR.bind(contact, intendedAmount, id, FacilitatedTx.RPR_INITIATOR), note, lastUpdated)
+    .then(contact.RPR.bind(contact, intendedAmount, id, FacilitatedTx.RPR_INITIATOR, note, lastUpdated))
     .then(this.save.bind(this));
 };
 
@@ -237,9 +237,9 @@ Contacts.prototype.digestRPR = function (message) {
     .then(contact.RPR.bind(contact,
             message.payload.intended_amount,
             message.payload.id,
-            FacilitatedTx.RPR_RECEIVER),
+            FacilitatedTx.RPR_RECEIVER,
             message.payload.note,
-            message.payload.last_updated)
+            message.payload.last_updated))
     .then(this.save.bind(this))
     .then(() => message);
 };
