@@ -56,6 +56,7 @@ module.exports = (grunt) ->
           transform: [
             ["babelify", {
               presets: ["es2015"]
+              plugins: ["transform-object-assign"]
               global: true
               ignore: [
                 "/src/blockchain-socket.js"
